@@ -1,4 +1,4 @@
-import { AppState } from '../types/model';
+import { AppState, Questions } from '../types/model';
 import { ACTIONS } from './actionCreator';
 
 interface ActionModel {
@@ -42,6 +42,11 @@ function handleLoadQuestionnaire(state: AppState, payload: any) {
 }
 
 function handleJumpToQuestion(state: AppState, payload: any) {
+  let question = state.questionnaire.questions.find(question => question.identifier === state.questionId)
+  if(!!checkQuestionRequirement(question!))
+  {
+    return handleShowRequiredMessage(state)
+  }
   return {
     ...state,
     questionId: payload,
@@ -49,8 +54,14 @@ function handleJumpToQuestion(state: AppState, payload: any) {
   }
 }
 
-function handleSubmitAnswer(state: AppState, payload: any) {
-  let question = state.questionnaire.questions.find(question => question.identifier === payload)
+function handleShowRequiredMessage(state: AppState) {
+  return {
+    ...state,
+    showRequiredMessage: true
+  }
+}
+
+function checkQuestionRequirement(question: Questions) {
   if (question?.required) {
     let showMessage = false;
     if (question.question_type === 'multiple-choice') {
@@ -59,14 +70,17 @@ function handleSubmitAnswer(state: AppState, payload: any) {
     else {
       showMessage = !(!!question.description && question.description.length > 0);
     }
-    if (!!showMessage) {
-      return {
-        ...state,
-        showRequiredMessage: true
-      }
-    }
+    return showMessage;
   }
+  return false;
+}
 
+function handleSubmitAnswer(state: AppState, payload: any) {
+  let question = state.questionnaire.questions.find(question => question.identifier === payload)
+  if(!!checkQuestionRequirement(question!))
+  {
+    return handleShowRequiredMessage(state)
+  }
   let nextQuestionId = '';
   if(!!question?.jumps && question?.jumps.length > 0)
   {

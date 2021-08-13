@@ -6,7 +6,7 @@ export const ACTIONS = {
   JUMP_TO_QUESTION: 'JUMP_TO_QUESTION',
   SUBMIT_ANSWER: 'SUBMIT_ANSWER',
   SAVE_ITEM: 'SAVE_ITEM',
-  START_AGAIN: 'START_AGAIN'
+  START_AGAIN: 'START_AGAIN',
 }
 
 export const initQuestionnaire = () => {
