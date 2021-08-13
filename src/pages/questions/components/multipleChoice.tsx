@@ -1,33 +1,22 @@
 import {
-  useEffect,
-  useState
-} from 'react'
+  useState,
+  useEffect
+} from 'react';
 
 import {
-  Container,
   Row,
   Col,
   Button,
   ListGroup,
-  Alert,
 } from 'react-bootstrap';
 
 import styled from 'styled-components';
-import { Questions, Choices } from '../../../types/model';
+import { Choices } from '../../../types/model';
 import { submitAnswer, saveItem } from '../../../stateManager/actionCreator';
 import { useAppState } from '../../../context/appStateContext';
 import { useDispatch } from '../../../context/dispatcherContext';
-
-const MultipleChoiceContainer = styled(Container)`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
-
-const Header = styled(Row)`
-  padding: 16px 0;
-`;
+import { Questions } from '../../../types/model';
+import Layout from './layout';
 
 const ButtonRow = styled(Row)`
   margin-top:16px;
@@ -39,10 +28,6 @@ const ListItem = styled(ListGroup.Item)`
 }
 `;
 
-const AlertRow = styled(Row)`
-  margin-top:14px;
-`;
-
 export default function MultipleChoice() {
   const state = useAppState();
   const dispatch = useDispatch();
@@ -52,7 +37,7 @@ export default function MultipleChoice() {
     let question = state.questionnaire.questions.find(question => question.identifier === state.questionId);
     setCurrentQuestion(question);
     // eslint-disable-next-line
-  }, [state.questionId])
+  }, [state.questionId]);
 
   const saveAnswer = () => {
     dispatch(submitAnswer(state.questionId));
@@ -78,12 +63,7 @@ export default function MultipleChoice() {
   }
 
   return (
-    <MultipleChoiceContainer fluid>
-      <Header>
-        <Col>
-          <h4>{currentQuestion?.headline}</h4>
-        </Col>
-      </Header>
+    <Layout headline={currentQuestion?.headline}>
       <Row>
         <Col>
           <ListGroup>
@@ -98,15 +78,6 @@ export default function MultipleChoice() {
           </Button>
         </Col>
       </ButtonRow>
-      {!!state.showRequiredMessage &&
-        <AlertRow>
-          <Col>
-            <Alert variant='danger'>
-              This question is required
-            </Alert>
-          </Col>
-        </AlertRow>
-      }
-    </MultipleChoiceContainer>
+    </Layout>
   );
 }

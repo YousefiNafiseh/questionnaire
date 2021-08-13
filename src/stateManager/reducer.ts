@@ -151,6 +151,6 @@ function handleStartAgain(state: AppState) {
     finished: false,
     loading: true,
     questionId: '',
-    counter: state.questionnaireNumber + 1
+    questionnaireNumber: state.questionnaireNumber + 1
   }
 }
