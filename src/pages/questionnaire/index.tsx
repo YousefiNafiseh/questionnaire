@@ -36,7 +36,7 @@ export default function Questionnaires() {
     dispatch(initQuestionnaire());
     setLoading(false);
     // eslint-disable-next-line
-  }, [state.counter]);
+  }, [state.questionnaireNumber]);
 
   const showComponent = () => {
     if (!state.finished && !loading && !state.questionId) {

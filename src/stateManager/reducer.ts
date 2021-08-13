@@ -18,7 +18,8 @@ export const INIT_STATE: AppState = {
   answers: [],
   questionId: '',
   finished: false,
-  counter: 0
+  questionnaireNumber: 0,
+  showRequiredMessage: false,
 }
 
 export function reducer(state: AppState, action: ActionModel) {
@@ -36,19 +37,36 @@ const ACTION_HANDLERS = {
 function handleLoadQuestionnaire(state: AppState, payload: any) {
   return {
     ...state,
-    questionnaire: payload
+    questionnaire: payload,    
   }
 }
 
 function handleJumpToQuestion(state: AppState, payload: any) {
   return {
     ...state,
-    questionId: payload
+    questionId: payload,
+    showRequiredMessage: false
   }
 }
 
 function handleSubmitAnswer(state: AppState, payload: any) {
   let question = state.questionnaire.questions.find(question => question.identifier === payload)
+  if (question?.required) {
+    let showMessage = false;
+    if (question.question_type === 'multiple-choice') {
+      showMessage = !question.choices?.some(choice => choice.selected === true);
+    }
+    else {
+      showMessage = !(!!question.description && question.description.length > 0);
+    }
+    if (!!showMessage) {
+      return {
+        ...state,
+        showRequiredMessage: true
+      }
+    }
+  }
+
   let nextQuestionId = '';
   if(!!question?.jumps && question?.jumps.length > 0)
   {
@@ -72,7 +90,8 @@ function handleSubmitAnswer(state: AppState, payload: any) {
     {
       return {
         ...state,
-        finished: true
+        finished: true,
+        showRequiredMessage: false
       }
     }
   }
@@ -118,6 +137,6 @@ function handleStartAgain(state: AppState) {
     finished: false,
     loading: true,
     questionId: '',
-    counter: state.counter + 1
+    counter: state.questionnaireNumber + 1
   }
 }

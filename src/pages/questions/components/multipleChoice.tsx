@@ -9,11 +9,12 @@ import {
   Col,
   Button,
   ListGroup,
+  Alert,
 } from 'react-bootstrap';
 
 import styled from 'styled-components';
 import { Questions, Choices } from '../../../types/model';
-import { submitAnswer, saveItem} from '../../../stateManager/actionCreator';
+import { submitAnswer, saveItem } from '../../../stateManager/actionCreator';
 import { useAppState } from '../../../context/appStateContext';
 import { useDispatch } from '../../../context/dispatcherContext';
 
@@ -38,6 +39,10 @@ const ListItem = styled(ListGroup.Item)`
 }
 `;
 
+const AlertRow = styled(Row)`
+  margin-top:14px;
+`;
+
 export default function MultipleChoice() {
   const state = useAppState();
   const dispatch = useDispatch();
@@ -57,7 +62,7 @@ export default function MultipleChoice() {
     dispatch(saveItem(state.questionId, value));
   }
 
-  const showListItem = () =>{
+  const showListItem = () => {
     let question = state.questionnaire.questions.find(question => question.identifier === state.questionId);
     return question?.choices?.map((choice: Choices, index: number) => {
       let isActive = choice.selected ? { active: true } : {};
@@ -93,6 +98,15 @@ export default function MultipleChoice() {
           </Button>
         </Col>
       </ButtonRow>
+      {!!state.showRequiredMessage &&
+        <AlertRow>
+          <Col>
+            <Alert variant='danger'>
+              This question is required
+            </Alert>
+          </Col>
+        </AlertRow>
+      }
     </MultipleChoiceContainer>
   );
 }

@@ -49,7 +49,8 @@ export interface AppState {
   answers: AnswersModel[],
   questionId: string,
   finished: boolean,
-  counter: number
+  questionnaireNumber: number,
+  showRequiredMessage: boolean,
 }
 
 export interface ActionModel{

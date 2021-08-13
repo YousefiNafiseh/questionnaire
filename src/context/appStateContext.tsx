@@ -14,7 +14,8 @@ const AppStateContext = createContext<AppState>({
   answers: [],
   questionId: '',
   finished: false,
-  counter: 0
+  questionnaireNumber: 0,
+  showRequiredMessage: false,
 });
 
 function useAppState() {

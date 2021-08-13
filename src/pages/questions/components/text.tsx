@@ -9,6 +9,7 @@ import {
   Col,
   Button,
   Form,
+  Alert
 } from 'react-bootstrap';
 
 import styled from 'styled-components';
@@ -26,6 +27,10 @@ const TextContainer = styled(Container)`
 
 const Header = styled(Row)`
   padding: 16px 0;
+`;
+
+const AlertRow = styled(Row)`
+  margin-top:14px;
 `;
 
 export default function Text() {
@@ -77,6 +82,15 @@ export default function Text() {
           </Form>
         </Col>
       </Row>
+      {!!state.showRequiredMessage &&
+        <AlertRow>
+          <Col>
+            <Alert variant='danger'>
+              This question is required
+            </Alert>
+          </Col>
+        </AlertRow>
+      }
     </TextContainer>
   );
 }
